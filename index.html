@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>3D Box Preview</title>
+  <style>
+    body { margin: 0; background: #f9f9f9; }
+    canvas { display: block; }
+    #controls { position: fixed; top: 10px; left: 10px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    input { width: 60px; margin: 0 5px; }
+  </style>
+</head>
+<body>
+
+<div id="controls">
+  Length: <input type="number" id="length" value="1" min="0.1">
+  Width: <input type="number" id="width" value="1" min="0.1">
+  Height: <input type="number" id="height" value="1" min="0.1">
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script>
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({antialias: true});
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  const light = new THREE.DirectionalLight(0xffffff, 1);
+  light.position.set(5, 5, 5);
+  scene.add(light);
+  scene.add(new THREE.AmbientLight(0x404040));
+
+  const material = new THREE.MeshStandardMaterial({ color: 0x007bff });
+
+  let boxMesh = null;
+
+  function createBox(length, width, height) {
+    if (boxMesh) {
+      scene.remove(boxMesh);
+      boxMesh.geometry.dispose();
+    }
+    const geometry = new THREE.BoxGeometry(length, height, width);
+    boxMesh = new THREE.Mesh(geometry, material);
+    scene.add(boxMesh);
+  }
+
+  createBox(1, 1, 1);
+  camera.position.z = 5;
+
+  function animate() {
+    requestAnimationFrame(animate);
+    if (boxMesh) boxMesh.rotation.y += 0.005;
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  document.querySelectorAll('#length, #width, #height').forEach(input => {
+    input.addEventListener('input', () => {
+      const l = parseFloat(document.getElementById('length').value);
+      const w = parseFloat(document.getElementById('width').value);
+      const h = parseFloat(document.getElementById('height').value);
+      createBox(l, w, h);
+    });
+  });
+</script>
+
+</body>
+</html>
