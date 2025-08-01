@@ -1,69 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>3D Box Preview</title>
+  <meta charset="UTF-8" />
+  <title>Plan your Road Map</title>
   <style>
-    body { margin: 0; background: #f9f9f9; }
-    canvas { display: block; }
-    #controls { position: fixed; top: 10px; left: 10px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    input { width: 60px; margin: 0 5px; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #0a0a0a;
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    #tsparticles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none; /* Ensures it doesn't block interactions */
+    }
+
+    .hero-text {
+      position: relative;
+      z-index: 2;
+      color: white;
+      font-size: 60px;
+      text-align: center;
+      top: 40%;
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 2px;
+    }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@3/tsparticles.bundle.min.js"></script>
 </head>
 <body>
+  <div id="tsparticles"></div>
+  <div class="hero-text">Plan your Road Map</div>
 
-<div id="controls">
-  Length: <input type="number" id="length" value="1" min="0.1">
-  Width: <input type="number" id="width" value="1" min="0.1">
-  Height: <input type="number" id="height" value="1" min="0.1">
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
-<script>
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 1000);
-  const renderer = new THREE.WebGLRenderer({antialias: true});
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild(renderer.domElement);
-
-  const light = new THREE.DirectionalLight(0xffffff, 1);
-  light.position.set(5, 5, 5);
-  scene.add(light);
-  scene.add(new THREE.AmbientLight(0x404040));
-
-  const material = new THREE.MeshStandardMaterial({ color: 0x007bff });
-
-  let boxMesh = null;
-
-  function createBox(length, width, height) {
-    if (boxMesh) {
-      scene.remove(boxMesh);
-      boxMesh.geometry.dispose();
-    }
-    const geometry = new THREE.BoxGeometry(length, height, width);
-    boxMesh = new THREE.Mesh(geometry, material);
-    scene.add(boxMesh);
-  }
-
-  createBox(1, 1, 1);
-  camera.position.z = 5;
-
-  function animate() {
-    requestAnimationFrame(animate);
-    if (boxMesh) boxMesh.rotation.y += 0.005;
-    renderer.render(scene, camera);
-  }
-  animate();
-
-  document.querySelectorAll('#length, #width, #height').forEach(input => {
-    input.addEventListener('input', () => {
-      const l = parseFloat(document.getElementById('length').value);
-      const w = parseFloat(document.getElementById('width').value);
-      const h = parseFloat(document.getElementById('height').value);
-      createBox(l, w, h);
+  <script>
+    tsParticles.load("tsparticles", {
+      fullScreen: { enable: false },
+      background: { color: "#0a0a0a" },
+      particles: {
+        number: { value: 300 },
+        size: { value: 4 },
+        move: { enable: true, speed: 1, direction: "none" },
+        color: { value: "#00ffcc" },
+        shape: { type: "circle" },
+        opacity: { value: 0.7 }
+      },
+      interactivity: {
+        events: {
+          onHover: { enable: true, mode: "repulse" },
+        },
+        modes: {
+          repulse: { distance: 100, duration: 0.4 }
+        }
+      }
     });
-  });
-</script>
-
+  </script>
 </body>
 </html>
