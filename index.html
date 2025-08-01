@@ -17,7 +17,7 @@
       width: 100%;
       height: 100%;
       z-index: 1;
-      pointer-events: none; /* Ensures it doesn't block interactions */
+      pointer-events: none;
     }
 
     .hero-text {
@@ -31,7 +31,8 @@
       letter-spacing: 2px;
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/tsparticles@3/tsparticles.bundle.min.js"></script>
+  <!-- Load tsparticles from UNPKG CDN -->
+  <script src="https://unpkg.com/tsparticles@3/tsparticles.bundle.min.js"></script>
 </head>
 <body>
   <div id="tsparticles"></div>
@@ -51,7 +52,7 @@
       },
       interactivity: {
         events: {
-          onHover: { enable: true, mode: "repulse" },
+          onHover: { enable: true, mode: "repulse" }
         },
         modes: {
           repulse: { distance: 100, duration: 0.4 }
